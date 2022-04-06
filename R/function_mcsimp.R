@@ -107,6 +107,8 @@ mcsimp <- function(n_species = 5,
   ## internal function; see "fun_to_m.R"
 
   ## maximum growth at optimum
+  if (any(r0 < 1)) stop("r0 must be >= one")
+
   list_r0 <- fun_to_m(x = r0,
                       n_species = n_species,
                       n_patch = n_patch,
