@@ -1,35 +1,32 @@
 #' Simulate metacommunity dynamics
 #'
-#' @param n_species numeric value. Number of species in a metacommunity.
-#' @param n_patch numeric value. Number of patches in a metacommunity.
-#' @param n_warmup numeric value. Number of time-steps for warm-up. Default \code{200}.
-#' @param n_burnin numeric value. Number of time-steps for burn-in. Default \code{200}.
-#' @param n_timestep numeric value. Number of time-steps to be saved. Default \code{1000}.
-#' @param propagule_interval numeric value. Time interval for propagule introduction during warm-up. If \code{NULL}, a value of \code{ceiling(n_warmup / 10)} will be used.
-#' @param carrying_capacity numeric value (length should be one or equal to \code{n_patch}). Carrying capacities of individual patches. Default \code{100}.
-#' @param interaction_type character string. \code{"constant"} or \code{"random"}. \code{"constant"} assumes the unique interaction strength of \code{alpha} for all pairs of species. \code{"random"} draws random numbers from a uniform distribution with \code{min_alpha} and \code{max_alpha}.
-#' @param alpha numeric value. Species interaction strength. Enabled if \code{interaction_type = "constant"}. Default \code{0}.
-#' @param min_alpha numeric value. Minimum value of a uniform distribution that generates species interaction strength. Enabled if \code{interaction_type = "random"}. Default \code{NULL}.
-#' @param max_alpha numeric value. Maximum value of a uniform distribution that generates species interaction strength. Enabled if \code{interaction_type = "random"}. Default \code{NULL}.
-#' @param r0 numeric value (length should be one or equal to \code{n_species}). Maximum reproductive number of the Beverton-Holt model.
-#' @param niche_optim numeric value (length should be one or equal to \code{n_species}). Niche optimum of species (environmental value that maximizes the reproductive number). Default \code{NULL}.
-#' @param min_optim numeric value. Minimum value of a uniform distribution that generates optimal environmental values of simulated species. Values are randomly assigned to species. Enabled if \code{niche_optim = NULL}.
-#' @param max_optim numeric value. Maximum value of a uniform distribution that generates optimal environmental values of simulated species. Values are randomly assigned to species. Enabled if \code{niche_optim = NULL}.
-#' @param sd_niche_width numeric value (length should be one or equal to \code{n_species}). Niche width of species. Higher values indicate greater niche width.
-#' @param min_niche_width numeric value. Minimum value of a uniform distribution that generates niche width values of simulated species. Values are randomly assigned to species. Enabled if \code{sd_niche_width = NULL}.
-#' @param max_niche_width numeric value. Maximum value of a uniform distribution that generates niche width values of simulated species. Values are randomly assigned to species. Enabled if \code{sd_niche_width = NULL}.
-#' @param niche_cost numeric value. Determine the cost of wide niche (smaller values imply greater costs of wider niche). Default \code{1}.
-#' @param xy_coord data frame. Each row should correspond to an individual patch, with x and y coordinates (columns). Defualt \code{NULL}.
-#' @param distance_matrix numeric value. Distance matrix indicating distance between habitat patches. If provided, the distance matrix will be used to generate dispersal matrix and to calculate distance decay of environmental correlations. Default \code{NULL}.
-#' @param dispersal_matrix numeric value. Dispersal matrix to be used to simulate dispersal process. Override distance_matrix. Default \code{NULL}.
-#' @param landscape_size numeric value. Length of a landscape on a side. Enabled if \code{dispersal_matrix = NULL}.
-#' @param mean_env numeric value (length should be one or equal to \code{n_patch}). Mean environmental values of patches.
-#' @param sd_env numeric value. Standard deviation of temporal environmental variation at each patch.
-#' @param spatial_env_cor logical. If \code{TRUE}, spatial autocorrelation in temporal environmental fluctuation is considered. Default \code{FALSE}.
-#' @param phi numeric value. A parameter describing the distance decay of spatial autocorrelation in temporal environmental fluctuation. Enabled if \code{spatial_env_cor = TRUE}.
-#' @param p_dispersal numeric value (length should be one or equal to \code{n_species}). Probability of dispersal.
-#' @param theta numeric value. Dispersal parameter describing dispersal capability of species.
-#' @param plot logical. If \code{TRUE}, five sample patches and species of \code{df_dynamics} are plotted.
+#' @param n_species Number of species in a metacommunity.
+#' @param n_patch Number of patches in a metacommunity.
+#' @param n_warmup Number of time-steps for warm-up. Default \code{200}.
+#' @param n_burnin Number of time-steps for burn-in. Default \code{200}.
+#' @param n_timestep Number of time-steps to be saved. Default \code{1000}.
+#' @param propagule_interval Time interval for propagule introduction during warm-up. If \code{NULL}, a value of \code{ceiling(n_warmup / 10)} will be used.
+#' @param carrying_capacity Carrying capacity at each patch. Length should be one or equal to \code{n_patch}. Default \code{100}.
+#' @param interaction_type Species interaction type. \code{"constant"} or \code{"random"}. \code{"constant"} assumes the unique interaction strength of \code{alpha} for all pairs of species. \code{"random"} draws random numbers from a uniform distribution with \code{min_alpha} and \code{max_alpha}.
+#' @param alpha Species interaction strength. Enabled if \code{interaction_type = "constant"}. Default \code{0}.
+#' @param min_alpha Minimum value of a uniform distribution that generates species interaction strength. Enabled if \code{interaction_type = "random"}. Default \code{NULL}.
+#' @param max_alpha Maximum value of a uniform distribution that generates species interaction strength. Enabled if \code{interaction_type = "random"}. Default \code{NULL}.
+#' @param a Normalization constant
+#' @param e_a Activation energy
+#' @param e_d Deactivation energy
+#' @param tmp_h Temperature at which r is half of r_peak.
+#' @param scale_factor Scale factor.
+#' @param xy_coord Each row should correspond to an individual patch, with x and y coordinates (columns). Must be give as a data frame. Defualt \code{NULL}.
+#' @param distance_matrix Distance matrix indicating distance between habitat patches. If provided, the distance matrix will be used to generate dispersal matrix and to calculate distance decay of environmental correlations. Default \code{NULL}.
+#' @param dispersal_matrix Dispersal matrix to be used to simulate dispersal process. Override distance_matrix. Default \code{NULL}.
+#' @param landscape_size Length of a landscape on a side. Enabled if \code{dispersal_matrix = NULL}.
+#' @param mean_env Temperature at each patch. Length should be one or equal to \code{n_patch}.
+#' @param sd_env Standard deviation of temporal temperature variation at each patch.
+#' @param spatial_env_cor If \code{TRUE}, spatial autocorrelation in temporal environmental fluctuation is considered. Default \code{FALSE}.
+#' @param phi Parameter describing the distance decay of spatial autocorrelation in temporal environmental fluctuation. Enabled if \code{spatial_env_cor = TRUE}.
+#' @param p_dispersal Dispersal probability. Length should be one or equal to \code{n_species}.
+#' @param theta Dispersal parameter describing dispersal capability of species.
+#' @param plot If \code{TRUE}, five sample patches and species of \code{df_dynamics} are plotted.
 #'
 #' @return \code{df_dynamics} data frame containing simulated metacommunity dynamics.
 #' @return \code{df_species} data frame containing species attributes.
