@@ -46,7 +46,7 @@
 #' @examples
 #' \dontrun{
 #' # not run
-#' mcsim(n_patch = 5, n_species = 5)
+#' mcsimp(n_patch = 5, n_species = 5)
 #' }
 #'
 #' @export
