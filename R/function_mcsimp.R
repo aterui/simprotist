@@ -11,6 +11,7 @@
 #' @param alpha Species interaction strength. Enabled if \code{interaction_type = "constant"}. Default \code{0}.
 #' @param min_alpha Minimum value of a uniform distribution that generates species interaction strength. Enabled if \code{interaction_type = "random"}. Default \code{NULL}.
 #' @param max_alpha Maximum value of a uniform distribution that generates species interaction strength. Enabled if \code{interaction_type = "random"}. Default \code{NULL}.
+#' @param r0 Maximum population growth rate at the optimal temperature
 #' @param a Normalization constant
 #' @param e_a Activation energy
 #' @param e_d Deactivation energy
@@ -62,6 +63,7 @@ mcsimp <- function(n_species = 5,
                    alpha = 0,
                    min_alpha = NULL,
                    max_alpha = NULL,
+                   r0,
                    a,
                    e_a,
                    e_d,
@@ -104,10 +106,28 @@ mcsimp <- function(n_species = 5,
   # species attributes
   ## internal function; see "fun_to_m.R"
 
+  ## maximum growth at optimum
+  list_r0 <- fun_to_m(x = r0,
+                      n_species = n_species,
+                      n_patch = n_patch,
+                      param_attr = "species")
+
+  v_r0 <- list_r0$v_x
+  m_r0 <- list_r0$m_x
+
+  ## temperature specific growth
   list_param <- list(a = a,
                      e_a = e_a,
                      e_d = e_d,
                      tmp_h = tmp_h)
+
+  list_param_v <- lapply(list_param, function(x) {
+    y <- fun_to_m(x = x,
+                  n_species = n_species,
+                  n_patch = n_patch,
+                  param_attr = "species")
+    return(y$v_x)
+  })
 
   list_param_m <- lapply(list_param, function(x) {
     y <- fun_to_m(x = x,
@@ -270,8 +290,6 @@ mcsimp <- function(n_species = 5,
         c(m_k),
         # species
         rep(x = seq_len(n_species), times = n_patch),
-        # niche_optim
-        c(m_mu),
         # r_xt
         c(m_r_xt),
         # abundance
@@ -328,8 +346,10 @@ mcsimp <- function(n_species = 5,
     dplyr::summarise(mean_abundance = mean(.data$abundance)) %>%
     dplyr::right_join(dplyr::tibble(species = seq_len(n_species),
                                     r0 = v_r0,
-                                    niche_optim = v_mu,
-                                    sd_niche_width = v_sd_niche_width,
+                                    a = list_param_v$a,
+                                    e_a = list_param_v$e_a,
+                                    e_d = list_param_v$e_d,
+                                    tmp_h = list_param_v$tmp_h,
                                     p_dispersal = v_p_dispersal),
                       by = "species")
 
