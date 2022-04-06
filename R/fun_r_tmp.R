@@ -23,5 +23,7 @@ fun_r_tmp <- function(a,
     log(1 + exp((e_d / k_b) * ((1 / tmp_h) - (1 / tmp))))
 
   r <- exp(log_r) - scale_factor
-  return(r)
+  lambda <- exp(r)
+
+  return(lambda)
 }

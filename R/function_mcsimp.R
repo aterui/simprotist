@@ -279,21 +279,21 @@ mcsimp <- function(n_species = 5,
                     by = 1)
 
       m_dynamics[row_id, ] <- cbind(# timestep
-        I(n - n_discard),
-        # patch_id
-        rep(x = seq_len(n_patch), each = n_species),
-        # mean_env
-        rep(x = v_mu_z, each = n_species),
-        # env
-        c(m_z_xt),
-        # carrying_capacity
-        c(m_k),
-        # species
-        rep(x = seq_len(n_species), times = n_patch),
-        # r_xt
-        c(m_r_xt),
-        # abundance
-        c(m_n))
+                                    I(n - n_discard),
+                                    # patch_id
+                                    rep(x = seq_len(n_patch), each = n_species),
+                                    # mean_env
+                                    rep(x = v_mu_z, each = n_species),
+                                    # env
+                                    c(m_z_xt),
+                                    # carrying_capacity
+                                    c(m_k),
+                                    # species
+                                    rep(x = seq_len(n_species), times = n_patch),
+                                    # r_xt
+                                    c(m_r_xt),
+                                    # abundance
+                                    c(m_n))
 
     }
 
