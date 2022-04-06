@@ -16,19 +16,21 @@ fun_r_tmp(
 )
 }
 \arguments{
-\item{a}{normalization constant.}
+\item{a}{Normalization constant.}
 
-\item{e_a}{activation energy}
+\item{e_a}{Activation energy}
 
-\item{e_d}{deactivation energy}
+\item{e_d}{Deactivation energy}
 
 \item{k_b}{Boltzmann's constant}
 
-\item{tmp}{temperature}
+\item{tmp}{Temperature}
 
-\item{tmp_r}{reference temperature}
+\item{tmp_r}{Reference temperature}
 
-\item{tmp_h}{half-r temperature}
+\item{tmp_h}{Half-r temperature}
+
+\item{scale_factor}{Scale factor}
 }
 \description{
 Internal function: function for temperature-dependent population growth

@@ -16,6 +16,7 @@ mcsimp(
   alpha = 0,
   min_alpha = NULL,
   max_alpha = NULL,
+  r0,
   a,
   e_a,
   e_d,
@@ -56,6 +57,8 @@ mcsimp(
 \item{min_alpha}{Minimum value of a uniform distribution that generates species interaction strength. Enabled if \code{interaction_type = "random"}. Default \code{NULL}.}
 
 \item{max_alpha}{Maximum value of a uniform distribution that generates species interaction strength. Enabled if \code{interaction_type = "random"}. Default \code{NULL}.}
+
+\item{r0}{Maximum population growth rate at the optimal temperature}
 
 \item{a}{Normalization constant}
 
@@ -108,7 +111,7 @@ Simulate metacommunity dynamics
 \examples{
 \dontrun{
 # not run
-mcsim(n_patch = 5, n_species = 5)
+mcsimp(n_patch = 5, n_species = 5)
 }
 
 }

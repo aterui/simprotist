@@ -1,11 +1,12 @@
 #' Internal function: function for temperature-dependent population growth
-#' @param a normalization constant.
-#' @param e_a activation energy
-#' @param e_d deactivation energy
+#' @param a Normalization constant.
+#' @param e_a Activation energy
+#' @param e_d Deactivation energy
 #' @param k_b Boltzmann's constant
-#' @param tmp temperature
-#' @param tmp_r reference temperature
-#' @param tmp_h half-r temperature
+#' @param tmp Temperature
+#' @param tmp_r Reference temperature
+#' @param tmp_h Half-r temperature
+#' @param scale_factor Scale factor
 #' @export
 
 fun_r_tmp <- function(a,
