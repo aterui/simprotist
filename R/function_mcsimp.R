@@ -195,7 +195,6 @@ mcsimp <- function(n_species = 5,
                "env",
                "carrying_capacity",
                "species",
-               "niche_optim",
                "r_xt",
                "abundance")
 
