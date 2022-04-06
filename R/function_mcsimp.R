@@ -137,6 +137,9 @@ mcsimp <- function(n_species = 5,
     return(y$m_x)
   })
 
+  ## optimal temperature
+  niche_optim <- (e_d * tmp_h) / (e_d + 8.6*1E-5 * tmp_h * log((e_d / e_a) - 1))
+
   # interaction matrix
   ## internal function; see "fun_int_mat.R"
   m_interaction <- fun_int_mat(n_species = n_species,
@@ -195,6 +198,7 @@ mcsimp <- function(n_species = 5,
                "env",
                "carrying_capacity",
                "species",
+               "niche_optim",
                "r_xt",
                "abundance")
 
@@ -289,6 +293,8 @@ mcsimp <- function(n_species = 5,
                                     c(m_k),
                                     # species
                                     rep(x = seq_len(n_species), times = n_patch),
+                                    # optimal niche
+                                    rep(x = niche_optim, times = n_patch),
                                     # r_xt
                                     c(m_r_xt),
                                     # abundance
