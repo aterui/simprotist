@@ -54,48 +54,41 @@
 #'
 #' @export
 #'
-mcsim <- function(n_species = 5,
-                  n_patch = 5,
-                  n_warmup = 200,
-                  n_burnin = 200,
-                  n_timestep = 1000,
-                  propagule_interval = NULL,
-                  carrying_capacity = 100,
-                  interaction_type = "constant",
-                  alpha = 0,
-                  min_alpha = NULL,
-                  max_alpha = NULL,
-                  r0 = 4,
-                  niche_optim = NULL,
-                  min_optim = -1,
-                  max_optim = 1,
-                  sd_niche_width = NULL,
-                  min_niche_width = 0.1,
-                  max_niche_width = 1,
-                  niche_cost = 1,
-                  xy_coord = NULL,
-                  distance_matrix = NULL,
-                  dispersal_matrix = NULL,
-                  landscape_size = 10,
-                  mean_env = 0,
-                  sd_env = 0.1,
-                  spatial_env_cor = FALSE,
-                  phi = 1,
-                  p_dispersal = 0.1,
-                  theta = 1,
-                  plot = FALSE
+mcsimp <- function(n_species = 5,
+                   n_patch = 5,
+                   n_warmup = 200,
+                   n_burnin = 200,
+                   n_timestep = 1000,
+                   propagule_interval = NULL,
+                   carrying_capacity = 100,
+                   interaction_type = "constant",
+                   alpha = 0,
+                   min_alpha = NULL,
+                   max_alpha = NULL,
+                   a,
+                   e_a,
+                   e_d,
+                   tmp_h,
+                   scale_factor,
+                   xy_coord = NULL,
+                   distance_matrix = NULL,
+                   dispersal_matrix = NULL,
+                   landscape_size = 10,
+                   mean_env = 0,
+                   sd_env = 0,
+                   spatial_env_cor = FALSE,
+                   phi = 1,
+                   p_dispersal = 0.1,
+                   theta = 1,
+                   plot = FALSE
 ) {
-
-  # define function ---------------------------------------------------------
-
-  fun_r <- function(r0, z, mu, sd, nu) {
-    r0 * exp(- ((sd^2) / (2 * nu^2))) * exp(- ((mu - z) / (sqrt(2) * sd))^2)
-  }
 
   # parameter setup ---------------------------------------------------------
 
-  # carrying capacity
+  # patch attributes
   ## internal function; see "fun_to_m.R"
+
+  ## carrying capacity
   list_k <- fun_to_m(x = carrying_capacity,
                      n_species = n_species,
                      n_patch = n_patch,
@@ -103,76 +96,7 @@ mcsim <- function(n_species = 5,
 
   m_k <- list_k$m_x
 
-  # species niche
-
-  ## niche optimum
-  ## internal function; see "fun_to_m.R"
-  if (is.null(niche_optim)) {
-
-    message("niche_optim is not given: generate species niche optimum randomly")
-
-    v_mu <- runif(n = n_species,
-                  min = min_optim,
-                  max = max_optim)
-
-    m_mu <- matrix(rep(x = v_mu,
-                       times = n_patch),
-                   nrow = n_species,
-                   ncol = n_patch)
-
-  } else {
-
-    list_mu <- fun_to_m(x = niche_optim,
-                        n_species = n_species,
-                        n_patch = n_patch,
-                        param_attr = "species")
-
-    v_mu <- list_mu$v_x
-    m_mu <- list_mu$m_x
-
-  }
-
-  ## niche width
-  ## internal function; see "fun_to_m.R"
-  if (is.null(sd_niche_width)) {
-
-    message("sd_niche_width is not given: generate species niche width randomly")
-
-    v_sd_niche_width <- runif(n = n_species,
-                              min = min_niche_width,
-                              max = max_niche_width)
-
-    m_sd_niche_width <- matrix(rep(x = v_sd_niche_width,
-                                   times = n_patch),
-                               nrow = n_species,
-                               ncol = n_patch)
-
-  } else {
-
-    list_sd_niche_width <- fun_to_m(x = sd_niche_width,
-                                    n_species = n_species,
-                                    n_patch = n_patch,
-                                    param_attr = "species")
-
-    v_sd_niche_width <- list_sd_niche_width$v_x
-    m_sd_niche_width <- list_sd_niche_width$m_x
-
-  }
-
-  ## maximum reproductive number
-  ## internal function; see "fun_to_m.R"
-  if (any(r0 < 1)) stop("r0 must be greater than or equal to one")
-
-  list_r0 <- fun_to_m(x = r0,
-                      n_species = n_species,
-                      n_patch = n_patch,
-                      param_attr = "species")
-
-  v_r0 <- list_r0$v_x
-  m_r0 <- list_r0$m_x
-
-  ## environmental variation among patches
-  ## internal function; see "fun_to_m.R"
+  ## mean patch environment
   list_mu_z <- fun_to_m(x = mean_env,
                         n_species = n_species,
                         n_patch = n_patch,
@@ -180,7 +104,23 @@ mcsim <- function(n_species = 5,
 
   v_mu_z <- list_mu_z$v_x
 
-  ## interaction matrix
+  # species attributes
+  ## internal function; see "fun_to_m.R"
+
+  list_param <- list(a = a,
+                     e_a = e_a,
+                     e_d = e_d,
+                     tmp_h = tmp_h)
+
+  list_param_m <- lapply(list_param, function(x) {
+    y <- fun_to_m(x = x,
+                  n_species = n_species,
+                  n_patch = n_patch,
+                  param_attr = "species")
+    return(y$m_x)
+  })
+
+  # interaction matrix
   ## internal function; see "fun_int_mat.R"
   m_interaction <- fun_int_mat(n_species = n_species,
                                alpha = alpha,
@@ -188,7 +128,7 @@ mcsim <- function(n_species = 5,
                                max_alpha = max_alpha,
                                interaction_type = interaction_type)
 
-  ## dispersal matrix
+  # dispersal matrix
   ## internal function; see "fun_disp_mat.R"
   list_dispersal <- fun_disp_mat(n_patch = n_patch,
                                  landscape_size = landscape_size,
@@ -292,11 +232,14 @@ mcsim <- function(n_species = 5,
                      ncol = n_patch)
 
     ## time-specific intrinsic growth rate
-    m_r_xt <- fun_r(r0 = m_r0,
-                    mu = m_mu,
-                    z = m_z_xt,
-                    sd = m_sd_niche_width,
-                    nu = niche_cost)
+    m_r_xt <- fun_r_tmp(a = list_param_m$a,
+                        e_a = list_param_m$e_a,
+                        e_d = list_param_m$e_d,
+                        k_b = 8.6*1E-5,
+                        tmp = m_z_xt,
+                        tmp_r = 298.15,
+                        tmp_h = list_param_m$tmp_h,
+                        scale_factor = scale_factor)
 
     ## internal community dynamics with competition
     m_n_hat <- (m_n * m_r_xt) / (1 + ((m_r0 - 1) / m_k) * (m_interaction %*% m_n))
