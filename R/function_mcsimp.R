@@ -185,6 +185,7 @@ mcsimp <- function(n_species = 5,
 
   if (spatial_env_cor == TRUE) {
 
+    if (is.null(m_distance)) stop("Provide distance matrix to model spatial environmental autocorrelation")
     m_sigma <- var_env * exp(-phi * m_distance)
 
   }else{
