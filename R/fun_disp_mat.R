@@ -89,6 +89,8 @@ fun_disp_mat <- function(n_patch,
     if (nrow(dispersal_matrix) != n_patch) stop("invalid dimension: dispersal_matrix must have a dimension of n_patch * n_patch")
     if (any(diag(dispersal_matrix) != 0)) stop("invalid dispersal_matrix: diagonal elements must be zero")
 
+    df_xy_coord <- NULL
+
     m_distance <- NULL
 
     m_dispersal <- data.matrix(dispersal_matrix)
