@@ -1,9 +1,10 @@
 #' Internal function: dispersal
 #'
-#' @param x matrix of population sizes
-#' @param v_p_dispersal vector of dispersal probability
-#' @param m_dispersal dispersal matrix
+#' @param x Matrix of population sizes
+#' @param v_p_dispersal Vector of dispersal probability
+#' @param m_dispersal Dispersal matrix
 #' @param boundary_condition Define boundary condition for dispersal. \code{retain} has not loss, \code{loss} induces net loss out of the network.
+#' @param outlet Outlet patch id
 #'
 #' @author Akira Terui, \email{hanabi0111@gmail.com}
 #'
@@ -13,7 +14,8 @@
 fun_dispersal <- function(x,
                           v_p_dispersal,
                           m_dispersal,
-                          boundary_condition) {
+                          boundary_condition,
+                          outlet = NULL) {
 
   if (any(diag(m_dispersal) != 0)) stop("error in m_dispersal")
 
@@ -42,6 +44,9 @@ fun_dispersal <- function(x,
   }
 
   if (boundary_condition == "loss") {
+
+    if (is.null(outlet)) stop("Specify 'outlet'")
+
     # m_e_hat: expected number of emigrants from each habitat patch
     # headwaters have reduced emigration
     m_e_hat <- t(sapply(seq_len(nrow(x)), function(i) {

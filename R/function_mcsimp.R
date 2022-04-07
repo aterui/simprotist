@@ -21,6 +21,7 @@
 #' @param distance_matrix Distance matrix indicating distance between habitat patches. If provided, the distance matrix will be used to generate dispersal matrix and to calculate distance decay of environmental correlations. Default \code{NULL}.
 #' @param dispersal_matrix Dispersal matrix to be used to simulate dispersal process. Override distance_matrix. Default \code{NULL}.
 #' @param boundary_condition Define boundary condition for dispersal. \code{retain} has not loss, \code{loss} induces net loss out of the network.
+#' @param outlet Outlet patch id
 #' @param landscape_size Length of a landscape on a side. Enabled if \code{dispersal_matrix = NULL}.
 #' @param mean_env Temperature at each patch. Length should be one or equal to \code{n_patch}.
 #' @param sd_env Standard deviation of temporal temperature variation at each patch.
@@ -74,6 +75,7 @@ mcsimp <- function(n_species = 5,
                    distance_matrix = NULL,
                    dispersal_matrix = NULL,
                    boundary_condition = "retain",
+                   outlet = NULL,
                    landscape_size = 10,
                    mean_env = 0,
                    sd_env = 0,
@@ -272,7 +274,8 @@ mcsimp <- function(n_species = 5,
     m_n_prime <- fun_dispersal(x = m_n_hat,
                                v_p_dispersal = v_p_dispersal,
                                m_dispersal = m_dispersal,
-                               boundary_condition = boundary_condition)
+                               boundary_condition = boundary_condition,
+                               outlet = outlet)
 
     ## demographic stochasticity
     m_n <- matrix(rpois(n = n_species * n_patch,
