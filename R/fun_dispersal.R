@@ -18,16 +18,16 @@ fun_dispersal <- function(x,
   if (any(diag(m_dispersal) != 0)) stop("error in m_dispersal")
 
   # x is n_species (row) x n_patch (column) matrix
-  # m_e_hat: expected number of emigrants from each habitat patch
-  m_e_hat <- x * v_p_dispersal
-
-  # m_e_sum: summed across patches
-  v_e_sum <- rowSums(m_e_hat)
-
-  # immigration potential for each patch = m_e_hat x m_dispersal (unit: individuals
-  m_i_raw <- m_e_hat %*% m_dispersal
-
   if (boundary_condition == "retain") {
+    # m_e_hat: expected number of emigrants from each habitat patch
+    m_e_hat <- x * v_p_dispersal
+
+    # m_e_sum: summed across patches
+    v_e_sum <- rowSums(m_e_hat)
+
+    # immigration potential for each patch = m_e_hat x m_dispersal (unit: individuals
+    m_i_raw <- m_e_hat %*% m_dispersal
+
     # v_i_sum: summed across patches
     v_i_sum <- rowSums(m_i_raw)
 
@@ -42,7 +42,16 @@ fun_dispersal <- function(x,
   }
 
   if (boundary_condition == "loss") {
-    m_i_hat <- m_i_raw
+    # m_e_hat: expected number of emigrants from each habitat patch
+    # headwaters have reduced emigration
+    m_e_hat <- t(sapply(seq_len(nrow(x)), function(i) {
+      rowSums(m_dispersal * (x[i,] * v_p_dispersal[i]))
+    }))
+
+    # outlet has the same proportion of emigration - net loss
+    m_e_hat[, outlet] <- x[, outlet] * v_p_dispersal
+
+    m_i_hat <- (x * v_p_dispersal) %*% m_dispersal
   }
 
   m_n_prime <- x + m_i_hat - m_e_hat
