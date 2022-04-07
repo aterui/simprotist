@@ -4,16 +4,18 @@
 \alias{fun_dispersal}
 \title{Internal function: dispersal}
 \usage{
-fun_dispersal(x, v_p_dispersal, m_dispersal, boundary_condition)
+fun_dispersal(x, v_p_dispersal, m_dispersal, boundary_condition, outlet = NULL)
 }
 \arguments{
-\item{x}{matrix of population sizes}
+\item{x}{Matrix of population sizes}
 
-\item{v_p_dispersal}{vector of dispersal probability}
+\item{v_p_dispersal}{Vector of dispersal probability}
 
-\item{m_dispersal}{dispersal matrix}
+\item{m_dispersal}{Dispersal matrix}
 
 \item{boundary_condition}{Define boundary condition for dispersal. \code{retain} has not loss, \code{loss} induces net loss out of the network.}
+
+\item{outlet}{Outlet patch id}
 }
 \description{
 Internal function: dispersal

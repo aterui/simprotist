@@ -26,6 +26,7 @@ mcsimp(
   distance_matrix = NULL,
   dispersal_matrix = NULL,
   boundary_condition = "retain",
+  outlet = NULL,
   landscape_size = 10,
   mean_env = 0,
   sd_env = 0,
@@ -78,6 +79,8 @@ mcsimp(
 \item{dispersal_matrix}{Dispersal matrix to be used to simulate dispersal process. Override distance_matrix. Default \code{NULL}.}
 
 \item{boundary_condition}{Define boundary condition for dispersal. \code{retain} has not loss, \code{loss} induces net loss out of the network.}
+
+\item{outlet}{Outlet patch id.}
 
 \item{landscape_size}{Length of a landscape on a side. Enabled if \code{dispersal_matrix = NULL}.}
 
