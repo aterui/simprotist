@@ -25,6 +25,7 @@ mcsimp(
   xy_coord = NULL,
   distance_matrix = NULL,
   dispersal_matrix = NULL,
+  boundary_condition = "retain",
   landscape_size = 10,
   mean_env = 0,
   sd_env = 0,
@@ -75,6 +76,8 @@ mcsimp(
 \item{distance_matrix}{Distance matrix indicating distance between habitat patches. If provided, the distance matrix will be used to generate dispersal matrix and to calculate distance decay of environmental correlations. Default \code{NULL}.}
 
 \item{dispersal_matrix}{Dispersal matrix to be used to simulate dispersal process. Override distance_matrix. Default \code{NULL}.}
+
+\item{boundary_condition}{Define boundary condition for dispersal. \code{retain} has not loss, \code{loss} induces net loss out of the network.}
 
 \item{landscape_size}{Length of a landscape on a side. Enabled if \code{dispersal_matrix = NULL}.}
 

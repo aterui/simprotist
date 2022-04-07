@@ -4,7 +4,7 @@
 \alias{fun_dispersal}
 \title{Internal function: dispersal}
 \usage{
-fun_dispersal(x, v_p_dispersal, m_dispersal)
+fun_dispersal(x, v_p_dispersal, m_dispersal, boundary_condition)
 }
 \arguments{
 \item{x}{matrix of population sizes}
@@ -12,6 +12,8 @@ fun_dispersal(x, v_p_dispersal, m_dispersal)
 \item{v_p_dispersal}{vector of dispersal probability}
 
 \item{m_dispersal}{dispersal matrix}
+
+\item{boundary_condition}{Define boundary condition for dispersal. \code{retain} has not loss, \code{loss} induces net loss out of the network.}
 }
 \description{
 Internal function: dispersal
