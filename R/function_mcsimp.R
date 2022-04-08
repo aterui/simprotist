@@ -29,6 +29,7 @@
 #' @param phi Parameter describing the distance decay of spatial autocorrelation in temporal environmental fluctuation. Enabled if \code{spatial_env_cor = TRUE}.
 #' @param p_dispersal Dispersal probability. Length should be one or equal to \code{n_species}.
 #' @param theta Dispersal parameter describing dispersal capability of species.
+#' @param dispersal_interval Interval for dispersal event.
 #' @param plot If \code{TRUE}, five sample patches and species of \code{df_dynamics} are plotted.
 #'
 #' @return \code{df_dynamics} data frame containing simulated metacommunity dynamics.
@@ -83,6 +84,7 @@ mcsimp <- function(n_species = 5,
                    phi = 1,
                    p_dispersal = 0.1,
                    theta = 1,
+                   dispersal_interval = 1,
                    plot = FALSE
 ) {
 
@@ -230,6 +232,22 @@ mcsimp <- function(n_species = 5,
                    to = max(c(1, n_warmup)),
                    by = propagule_interval)
 
+  ## dispersal
+  if (dispersal_interval > n_sim) {
+
+    psi <- rep(0, n_sim)
+
+  } else {
+
+    dispersal <- seq(from = dispersal_interval,
+                     to = n_sim,
+                     by = dispersal_interval)
+
+    psi <- rep(0, n_sim)
+    psi[dispersal] <- 1
+
+  }
+
   ## initial values
   m_n <- matrix(rpois(n = n_species * n_patch,
                       lambda = 0.5),
@@ -272,11 +290,13 @@ mcsimp <- function(n_species = 5,
     m_n_hat <- (m_n * m_r_xt) / (1 + ((m_r0 - 1) / m_k) * (m_interaction %*% m_n))
 
     ## dispersal, internal function: see "fun_dispersal.R"
-    m_n_prime <- fun_dispersal(x = m_n_hat,
-                               v_p_dispersal = v_p_dispersal,
-                               m_dispersal = m_dispersal,
-                               boundary_condition = boundary_condition,
-                               outlet = outlet)
+    m_n_bar <- fun_dispersal(x = m_n_hat,
+                             v_p_dispersal = v_p_dispersal,
+                             m_dispersal = m_dispersal,
+                             boundary_condition = boundary_condition,
+                             outlet = outlet)
+
+    m_n_prime <- psi[n] * m_n_bar + (1 - psi[n]) * m_n_hat
 
     ## demographic stochasticity
     m_n <- matrix(rpois(n = n_species * n_patch,

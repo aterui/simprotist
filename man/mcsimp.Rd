@@ -34,6 +34,7 @@ mcsimp(
   phi = 1,
   p_dispersal = 0.1,
   theta = 1,
+  dispersal_interval = 1,
   plot = FALSE
 )
 }
@@ -95,6 +96,8 @@ mcsimp(
 \item{p_dispersal}{Dispersal probability. Length should be one or equal to \code{n_species}.}
 
 \item{theta}{Dispersal parameter describing dispersal capability of species.}
+
+\item{dispersal_interval}{Interval for dispersal event.}
 
 \item{plot}{If \code{TRUE}, five sample patches and species of \code{df_dynamics} are plotted.}
 }
