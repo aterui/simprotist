@@ -100,6 +100,8 @@ mcsimp(
 \item{dispersal_interval}{Interval for dispersal event.}
 
 \item{plot}{If \code{TRUE}, five sample patches and species of \code{df_dynamics} are plotted.}
+
+\item{propagule_seed}{Mean number of propagules}
 }
 \value{
 \code{df_dynamics} data frame containing simulated metacommunity dynamics.

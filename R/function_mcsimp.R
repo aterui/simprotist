@@ -6,6 +6,7 @@
 #' @param n_burnin Number of time-steps for burn-in. Default \code{200}.
 #' @param n_timestep Number of time-steps to be saved. Default \code{1000}.
 #' @param propagule_interval Time interval for propagule introduction during warm-up. If \code{NULL}, a value of \code{ceiling(n_warmup / 10)} will be used.
+#' @param propagule_seed Mean number of propagules
 #' @param carrying_capacity Carrying capacity at each patch. Length should be one or equal to \code{n_patch}. Default \code{100}.
 #' @param interaction_type Species interaction type. \code{"constant"} or \code{"random"}. \code{"constant"} assumes the unique interaction strength of \code{alpha} for all pairs of species. \code{"random"} draws random numbers from a uniform distribution with \code{min_alpha} and \code{max_alpha}.
 #' @param alpha Species interaction strength. Enabled if \code{interaction_type = "constant"}. Default \code{0}.
@@ -263,7 +264,7 @@ mcsimp <- function(n_species = 5,
 
       if (n %in% propagule) {
         m_n <- m_n + matrix(rpois(n = n_species * n_patch,
-                                  lambda = 0.5),
+                                  lambda = propagule_seed),
                             nrow = n_species,
                             ncol = n_patch)
       }
