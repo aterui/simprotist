@@ -19,11 +19,22 @@ fun_int_mat <- function(n_species,
 
   if (interaction_type == "constant") {
 
-    if (alpha < 0 | length(alpha) != 1) stop("invalid value of alpha - the value must be a positive scalar")
+    if (any(alpha < 0)) stop("invalid value of alpha")
 
-    m_interaction <- matrix(alpha,
-                            nrow = n_species,
-                            ncol = n_species)
+    if (length(alpha) == 1) {
+
+      m_interaction <- matrix(alpha,
+                              nrow = n_species,
+                              ncol = n_species)
+
+    }
+
+    if (is.matrix(alpha)) {
+
+      if (any(dim(alpha) != n_species)) stop("invalid dimension of alpha")
+      m_interaction <- alpha
+
+    }
 
   } else {
 
