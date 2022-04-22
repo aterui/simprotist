@@ -11,6 +11,7 @@ mcsimp(
   n_burnin = 200,
   n_timestep = 1000,
   propagule_interval = NULL,
+  propagule_seed = 0.5,
   carrying_capacity = 100,
   interaction_type = "constant",
   alpha = 0,
@@ -50,6 +51,8 @@ mcsimp(
 \item{n_timestep}{Number of time-steps to be saved. Default \code{1000}.}
 
 \item{propagule_interval}{Time interval for propagule introduction during warm-up. If \code{NULL}, a value of \code{ceiling(n_warmup / 10)} will be used.}
+
+\item{propagule_seed}{Mean number of propagules}
 
 \item{carrying_capacity}{Carrying capacity at each patch. Length should be one or equal to \code{n_patch}. Default \code{100}.}
 
@@ -100,8 +103,6 @@ mcsimp(
 \item{dispersal_interval}{Interval for dispersal event.}
 
 \item{plot}{If \code{TRUE}, five sample patches and species of \code{df_dynamics} are plotted.}
-
-\item{propagule_seed}{Mean number of propagules}
 }
 \value{
 \code{df_dynamics} data frame containing simulated metacommunity dynamics.
