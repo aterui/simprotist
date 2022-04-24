@@ -36,13 +36,23 @@ fun_to_m <- function(x,
 
     } else {
 
-      if (length(x) != n_patch) stop("x must have a length of one or n_patch")
+      if (is.matrix(x)) {
 
-      v_x <- x
-      m_x <- matrix(rep(x = x,
-                        each = n_species),
-                    nrow = n_species,
-                    ncol = n_patch)
+        if (nrow(x) != n_species | ncol(x) != n_patch) stop("invalid dimension of matrix x")
+        v_x <- NULL
+        m_x <- x
+
+      } else {
+
+        if (length(x) != n_patch) stop("x must have a length of one or n_patch")
+
+        v_x <- x
+        m_x <- matrix(rep(x = x,
+                          each = n_species),
+                      nrow = n_species,
+                      ncol = n_patch)
+
+      }
 
     } # ifelse
 
@@ -62,13 +72,23 @@ fun_to_m <- function(x,
 
     } else {
 
-      if (length(x) != n_species) stop("x must have a length of one or n_species")
+      if (is.matrix(x)) {
 
-      v_x <- x
-      m_x <- matrix(rep(x = x,
-                        times = n_patch),
-                    nrow = n_species,
-                    ncol = n_patch)
+        if (nrow(x) != n_species | ncol(x) != n_patch) stop("invalid dimension of matrix x")
+        v_x <- NULL
+        m_x <- x
+
+      } else {
+
+        if (length(x) != n_species) stop("x must have a length of one or n_species")
+
+        v_x <- x
+        m_x <- matrix(rep(x = x,
+                          times = n_patch),
+                      nrow = n_species,
+                      ncol = n_patch)
+
+      }
 
     } # ifelse
 

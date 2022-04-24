@@ -1,7 +1,7 @@
 #' Internal function: dispersal
 #'
 #' @param x Matrix of population sizes
-#' @param v_p_dispersal Vector of dispersal probability
+#' @param m_p_dispersal Matrix of dispersal probability
 #' @param m_dispersal Dispersal matrix
 #' @param boundary_condition Define boundary condition for dispersal. \code{retain} has not loss, \code{loss} induces net loss out of the network.
 #' @param outlet Outlet patch id
@@ -12,7 +12,7 @@
 #'
 
 fun_dispersal <- function(x,
-                          v_p_dispersal,
+                          m_p_dispersal,
                           m_dispersal,
                           boundary_condition,
                           outlet = NULL) {
@@ -22,7 +22,7 @@ fun_dispersal <- function(x,
   # x is n_species (row) x n_patch (column) matrix
   if (boundary_condition == "retain") {
     # m_e_hat: expected number of emigrants from each habitat patch
-    m_e_hat <- x * v_p_dispersal
+    m_e_hat <- x * m_p_dispersal
 
     # m_e_sum: summed across patches
     v_e_sum <- rowSums(m_e_hat)
@@ -50,13 +50,13 @@ fun_dispersal <- function(x,
     # m_e_hat: expected number of emigrants from each habitat patch
     # headwaters have reduced emigration
     m_e_hat <- t(sapply(seq_len(nrow(x)), function(i) {
-      rowSums(m_dispersal * (x[i,] * v_p_dispersal[i]))
+      rowSums(m_dispersal * (x[i, ] * m_p_dispersal[i, ]))
     }))
 
     # outlet has the same proportion of emigration - net loss
-    m_e_hat[, outlet] <- x[, outlet] * v_p_dispersal
+    m_e_hat[, outlet] <- x[, outlet] * m_p_dispersal[, outlet]
 
-    m_i_hat <- (x * v_p_dispersal) %*% m_dispersal
+    m_i_hat <- (x * m_p_dispersal) %*% m_dispersal
   }
 
   m_n_prime <- x + m_i_hat - m_e_hat

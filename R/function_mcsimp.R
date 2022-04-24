@@ -174,9 +174,15 @@ mcsimp <- function(n_species = 5,
   df_xy_coord <- list_dispersal$df_xy_coord
 
   ## internal function; see "fun_to_v.R"
-  v_p_dispersal <- fun_to_v(x = p_dispersal,
-                            n = n_species)
+  list_p_dispersal <- fun_to_m(x = p_dispersal,
+                               n_species = n_species,
+                               n_patch = n_patch,
+                               param_attr = "patch")
 
+  m_p_dispersal <- list_p_dispersal$m_x
+
+  # model
+  fun_dyn <- fun_dyn_set(type)
 
   # model
   fun_dyn <- fun_dyn_set(type)
@@ -302,7 +308,7 @@ mcsimp <- function(n_species = 5,
 
     ## dispersal, internal function: see "fun_dispersal.R"
     m_n_bar <- fun_dispersal(x = m_n_hat,
-                             v_p_dispersal = v_p_dispersal,
+                             m_p_dispersal = m_p_dispersal,
                              m_dispersal = m_dispersal,
                              boundary_condition = boundary_condition,
                              outlet = outlet)
@@ -395,7 +401,7 @@ mcsimp <- function(n_species = 5,
                                     e_a = list_param_v$e_a,
                                     e_d = list_param_v$e_d,
                                     tmp_h = list_param_v$tmp_h,
-                                    p_dispersal = v_p_dispersal),
+                                    p_dispersal = rowMeans(m_p_dispersal)),
                       by = "species")
 
   # patch attributes
