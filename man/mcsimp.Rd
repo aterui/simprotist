@@ -10,6 +10,7 @@ mcsimp(
   n_warmup = 200,
   n_burnin = 200,
   n_timestep = 1000,
+  type = "bh",
   propagule_interval = NULL,
   propagule_seed = 0.5,
   carrying_capacity = 100,
@@ -49,6 +50,8 @@ mcsimp(
 \item{n_burnin}{Number of time-steps for burn-in. Default \code{200}.}
 
 \item{n_timestep}{Number of time-steps to be saved. Default \code{1000}.}
+
+\item{type}{Model type. Either "bh" or "ricker".}
 
 \item{propagule_interval}{Time interval for propagule introduction during warm-up. If \code{NULL}, a value of \code{ceiling(n_warmup / 10)} will be used.}
 

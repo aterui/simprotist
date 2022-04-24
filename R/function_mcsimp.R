@@ -5,6 +5,7 @@
 #' @param n_warmup Number of time-steps for warm-up. Default \code{200}.
 #' @param n_burnin Number of time-steps for burn-in. Default \code{200}.
 #' @param n_timestep Number of time-steps to be saved. Default \code{1000}.
+#' @param type Model type. Either "bh" or "ricker".
 #' @param propagule_interval Time interval for propagule introduction during warm-up. If \code{NULL}, a value of \code{ceiling(n_warmup / 10)} will be used.
 #' @param propagule_seed Mean number of propagules
 #' @param carrying_capacity Carrying capacity at each patch. Length should be one or equal to \code{n_patch}. Default \code{100}.
@@ -61,6 +62,7 @@ mcsimp <- function(n_species = 5,
                    n_warmup = 200,
                    n_burnin = 200,
                    n_timestep = 1000,
+                   type = "bh",
                    propagule_interval = NULL,
                    propagule_seed = 0.5,
                    carrying_capacity = 100,
@@ -176,6 +178,9 @@ mcsimp <- function(n_species = 5,
                             n = n_species)
 
 
+  # model
+  fun_dyn <- fun_dyn_set(type)
+
   # dynamics ----------------------------------------------------------------
 
   ## object setup ####
@@ -289,7 +294,11 @@ mcsimp <- function(n_species = 5,
                         scale_factor = scale_factor)
 
     ## internal community dynamics with competition
-    m_n_hat <- (m_n * m_r_xt) / (1 + ((m_r0 - 1) / m_k) * (m_interaction %*% m_n))
+    m_n_hat <- fun_dyn(n = m_n,
+                       r = m_r_xt,
+                       r0 = m_r0,
+                       k = m_k,
+                       interaction = m_interaction)
 
     ## dispersal, internal function: see "fun_dispersal.R"
     m_n_bar <- fun_dispersal(x = m_n_hat,
