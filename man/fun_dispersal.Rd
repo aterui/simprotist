@@ -4,12 +4,12 @@
 \alias{fun_dispersal}
 \title{Internal function: dispersal}
 \usage{
-fun_dispersal(x, v_p_dispersal, m_dispersal, boundary_condition, outlet = NULL)
+fun_dispersal(x, m_p_dispersal, m_dispersal, boundary_condition, outlet = NULL)
 }
 \arguments{
 \item{x}{Matrix of population sizes}
 
-\item{v_p_dispersal}{Vector of dispersal probability}
+\item{m_p_dispersal}{Matrix of dispersal probability}
 
 \item{m_dispersal}{Dispersal matrix}
 
