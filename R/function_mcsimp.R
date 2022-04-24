@@ -230,9 +230,9 @@ mcsimp <- function(n_species = 5,
 
   }
 
-  propagule <- seq(from = propagule_interval,
+  propagule <- seq(from = max(c(1, propagule_interval)),
                    to = max(c(1, n_warmup)),
-                   by = propagule_interval)
+                   by = max(c(1, propagule_interval)))
 
   ## dispersal
   if (dispersal_interval > n_sim) {
