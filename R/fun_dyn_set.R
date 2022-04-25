@@ -8,7 +8,7 @@ fun_dyn_set <- function(type) {
 
     fun_dyn <- function(n,
                         r,
-                        r0,
+                        r0 = NULL,
                         interaction,
                         k) {
 
