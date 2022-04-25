@@ -15,11 +15,6 @@ fun_to_m <- function(x,
                      n_patch,
                      param_attr) {
 
-  # check input -------------------------------------------------------------
-
-  if (!is.vector(x)) stop("x must be a vector")
-
-
   # conversion to matrix ----------------------------------------------------
 
   ## patch-wise
