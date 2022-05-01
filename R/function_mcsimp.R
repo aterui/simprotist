@@ -184,9 +184,6 @@ mcsimp <- function(n_species = 5,
   # model
   fun_dyn <- fun_dyn_set(type)
 
-  # model
-  fun_dyn <- fun_dyn_set(type)
-
   # dynamics ----------------------------------------------------------------
 
   ## object setup ####
