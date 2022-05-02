@@ -12,7 +12,7 @@ fun_dyn_set <- function(type) {
                         interaction,
                         k) {
 
-      (n * r) / (1 + ((r0 - 1) / k) * (interaction %*% n))
+      (n * r) / (1 + ((r - 1) / k) * (interaction %*% n))
 
     }
 
