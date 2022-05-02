@@ -44,7 +44,6 @@ fun_dispersal <- function(x,
 
   if (boundary_condition == "loss") {
 
-    message("boudary condition is 'loss': raw dispersal matrix was used to calculate immigration")
     m_e_hat <- x * m_p_dispersal
     m_i_hat <- x %*% m_dispersal
 
