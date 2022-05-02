@@ -4,7 +4,6 @@
 #' @param m_p_dispersal Matrix of dispersal probability
 #' @param m_dispersal Dispersal matrix
 #' @param boundary_condition Define boundary condition for dispersal. \code{retain} has not loss, \code{loss} induces net loss out of the network.
-#' @param outlet Outlet patch id
 #'
 #' @author Akira Terui, \email{hanabi0111@gmail.com}
 #'

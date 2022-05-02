@@ -14,8 +14,6 @@ fun_dispersal(x, m_p_dispersal, m_dispersal, boundary_condition)
 \item{m_dispersal}{Dispersal matrix}
 
 \item{boundary_condition}{Define boundary condition for dispersal. \code{retain} has not loss, \code{loss} induces net loss out of the network.}
-
-\item{outlet}{Outlet patch id}
 }
 \description{
 Internal function: dispersal

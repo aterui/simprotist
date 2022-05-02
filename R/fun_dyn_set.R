@@ -10,9 +10,20 @@ fun_dyn_set <- function(type) {
                         r,
                         r0 = NULL,
                         interaction,
-                        k) {
+                        k,
+                        fix_k = TRUE) {
 
-      (n * r) / (1 + ((r - 1) / k) * (interaction %*% n))
+      if (fix_k == TRUE) {
+
+        r_max <- r
+
+      } else {
+
+        r_max <- r0
+
+      }
+
+      (n * r) / (1 + ((r_max - 1) / k) * (interaction %*% n))
 
     }
 
@@ -24,9 +35,20 @@ fun_dyn_set <- function(type) {
                         r,
                         r0 = NULL,
                         interaction,
-                        k) {
+                        k,
+                        fix_k = TRUE) {
 
-      n * r * exp(1 - (interaction %*% n) / k)
+      if (fix_k == TRUE) {
+
+        r_max <- r
+
+      } else {
+
+        r_max <- r0
+
+      }
+
+      n * r_max * exp(1 - (interaction %*% n) / k)
 
     }
 
