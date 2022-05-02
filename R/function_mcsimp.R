@@ -14,7 +14,6 @@
 #' @param min_alpha Minimum value of a uniform distribution that generates species interaction strength. Enabled if \code{interaction_type = "random"}. Default \code{NULL}.
 #' @param max_alpha Maximum value of a uniform distribution that generates species interaction strength. Enabled if \code{interaction_type = "random"}. Default \code{NULL}.
 #' @param r0 Maximum population growth rate at the optimal temperature
-#' @param fix_k Whether fix realized carrying capacity regardless of environment
 #' @param a Normalization constant
 #' @param e_a Activation energy
 #' @param e_d Deactivation energy
@@ -71,7 +70,6 @@ mcsimp <- function(n_species = 5,
                    min_alpha = NULL,
                    max_alpha = NULL,
                    r0,
-                   fix_k = TRUE,
                    a,
                    e_a,
                    e_d,
