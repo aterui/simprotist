@@ -4,7 +4,7 @@
 \alias{fun_dispersal}
 \title{Internal function: dispersal}
 \usage{
-fun_dispersal(x, m_p_dispersal, m_dispersal, boundary_condition, outlet = NULL)
+fun_dispersal(x, m_p_dispersal, m_dispersal, boundary_condition)
 }
 \arguments{
 \item{x}{Matrix of population sizes}

@@ -14,8 +14,7 @@
 fun_dispersal <- function(x,
                           m_p_dispersal,
                           m_dispersal,
-                          boundary_condition,
-                          outlet = NULL) {
+                          boundary_condition) {
 
   if (any(diag(m_dispersal) != 0)) stop("error in m_dispersal")
 
@@ -45,18 +44,10 @@ fun_dispersal <- function(x,
 
   if (boundary_condition == "loss") {
 
-    if (is.null(outlet)) stop("Specify 'outlet'")
+    message("boudary condition is 'loss': raw dispersal matrix was used to calculate immigration")
+    m_e_hat <- x * m_p_dispersal
+    m_i_hat <- x %*% m_dispersal
 
-    # m_e_hat: expected number of emigrants from each habitat patch
-    # headwaters have reduced emigration
-    m_e_hat <- t(sapply(seq_len(nrow(x)), function(i) {
-      rowSums(m_dispersal * (x[i, ] * m_p_dispersal[i, ]))
-    }))
-
-    # outlet has the same proportion of emigration - net loss
-    m_e_hat[, outlet] <- x[, outlet] * m_p_dispersal[, outlet]
-
-    m_i_hat <- (x * m_p_dispersal) %*% m_dispersal
   }
 
   m_n_prime <- x + m_i_hat - m_e_hat
