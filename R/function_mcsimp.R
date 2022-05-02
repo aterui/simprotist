@@ -299,8 +299,7 @@ mcsimp <- function(n_species = 5,
                        r = m_r_xt,
                        r0 = m_r0,
                        k = m_k,
-                       interaction = m_interaction,
-                       fix_k = fix_k)
+                       interaction = m_interaction)
 
     ## dispersal, internal function: see "fun_dispersal.R"
     m_n_bar <- fun_dispersal(x = m_n_hat,
