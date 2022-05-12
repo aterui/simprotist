@@ -10,7 +10,6 @@ mcsimp(
   n_warmup = 200,
   n_burnin = 200,
   n_timestep = 1000,
-  type = "bh",
   propagule_interval = NULL,
   propagule_seed = 0.5,
   carrying_capacity = 100,
@@ -19,6 +18,7 @@ mcsimp(
   min_alpha = NULL,
   max_alpha = NULL,
   r0,
+  z = 1,
   a,
   e_a,
   e_d,
@@ -50,15 +50,13 @@ mcsimp(
 
 \item{n_timestep}{Number of time-steps to be saved. Default \code{1000}.}
 
-\item{type}{Model type. Either "bh" or "ricker".}
-
 \item{propagule_interval}{Time interval for propagule introduction during warm-up. If \code{NULL}, a value of \code{ceiling(n_warmup / 10)} will be used.}
 
 \item{propagule_seed}{Mean number of propagules}
 
 \item{carrying_capacity}{Carrying capacity at each patch. Length should be one or equal to \code{n_patch}. Default \code{100}.}
 
-\item{interaction_type}{Species interaction type. \code{"constant"} or \code{"random"}. \code{"constant"} assumes the unique interaction strength of \code{alpha} for all pairs of species. \code{"random"} draws random numbers from a uniform distribution with \code{min_alpha} and \code{max_alpha}.}
+\item{interaction_type}{Species interaction type. \code{"constant"} or \code{"random"}. \code{"constant"} assumes the unique interaction strength of \code{alpha} for all pairs of species or manual input of an interaction matrix. \code{"random"} draws random numbers from a uniform distribution with \code{min_alpha} and \code{max_alpha}.}
 
 \item{alpha}{Species interaction strength. Enabled if \code{interaction_type = "constant"}. Default \code{0}.}
 
@@ -67,6 +65,8 @@ mcsimp(
 \item{max_alpha}{Maximum value of a uniform distribution that generates species interaction strength. Enabled if \code{interaction_type = "random"}. Default \code{NULL}.}
 
 \item{r0}{Maximum population growth rate at the optimal temperature}
+
+\item{z}{Power exponent in the Hassel model. Beverton-Holt (z = 1), under- (z < 1), or over-compensation (z > 1)}
 
 \item{a}{Normalization constant}
 
