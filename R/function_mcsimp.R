@@ -5,15 +5,15 @@
 #' @param n_warmup Number of time-steps for warm-up. Default \code{200}.
 #' @param n_burnin Number of time-steps for burn-in. Default \code{200}.
 #' @param n_timestep Number of time-steps to be saved. Default \code{1000}.
-#' @param type Model type. Either "bh" or "ricker".
 #' @param propagule_interval Time interval for propagule introduction during warm-up. If \code{NULL}, a value of \code{ceiling(n_warmup / 10)} will be used.
 #' @param propagule_seed Mean number of propagules
 #' @param carrying_capacity Carrying capacity at each patch. Length should be one or equal to \code{n_patch}. Default \code{100}.
-#' @param interaction_type Species interaction type. \code{"constant"} or \code{"random"}. \code{"constant"} assumes the unique interaction strength of \code{alpha} for all pairs of species. \code{"random"} draws random numbers from a uniform distribution with \code{min_alpha} and \code{max_alpha}.
+#' @param interaction_type Species interaction type. \code{"constant"} or \code{"random"}. \code{"constant"} assumes the unique interaction strength of \code{alpha} for all pairs of species or manual input of an interaction matrix. \code{"random"} draws random numbers from a uniform distribution with \code{min_alpha} and \code{max_alpha}.
 #' @param alpha Species interaction strength. Enabled if \code{interaction_type = "constant"}. Default \code{0}.
 #' @param min_alpha Minimum value of a uniform distribution that generates species interaction strength. Enabled if \code{interaction_type = "random"}. Default \code{NULL}.
 #' @param max_alpha Maximum value of a uniform distribution that generates species interaction strength. Enabled if \code{interaction_type = "random"}. Default \code{NULL}.
 #' @param r0 Maximum population growth rate at the optimal temperature
+#' @param z Power exponent in the Hassel model. Beverton-Holt (z = 1), under- (z < 1), or over-compensation (z > 1)
 #' @param a Normalization constant
 #' @param e_a Activation energy
 #' @param e_d Deactivation energy
@@ -61,7 +61,6 @@ mcsimp <- function(n_species = 5,
                    n_warmup = 200,
                    n_burnin = 200,
                    n_timestep = 1000,
-                   type = "bh",
                    propagule_interval = NULL,
                    propagule_seed = 0.5,
                    carrying_capacity = 100,
@@ -70,6 +69,7 @@ mcsimp <- function(n_species = 5,
                    min_alpha = NULL,
                    max_alpha = NULL,
                    r0,
+                   z = 1,
                    a,
                    e_a,
                    e_d,
@@ -179,8 +179,6 @@ mcsimp <- function(n_species = 5,
 
   m_p_dispersal <- list_p_dispersal$m_x
 
-  # model
-  fun_dyn <- fun_dyn_set(type)
 
   # dynamics ----------------------------------------------------------------
 
@@ -295,11 +293,12 @@ mcsimp <- function(n_species = 5,
                         scale_factor = scale_factor)
 
     ## internal community dynamics with competition
-    m_n_hat <- fun_dyn(n = m_n,
-                       r = m_r_xt,
-                       r0 = m_r0,
-                       k = m_k,
-                       interaction = m_interaction)
+    m_n_hat <- hassel(n = m_n,
+                      r = m_r_xt,
+                      r0 = m_r0,
+                      k = m_k,
+                      interaction = m_interaction,
+                      z = z)
 
     ## dispersal, internal function: see "fun_dispersal.R"
     m_n_bar <- fun_dispersal(x = m_n_hat,
