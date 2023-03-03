@@ -293,12 +293,26 @@ mcsimp <- function(n_species = 5,
                         scale_factor = scale_factor)
 
     ## internal community dynamics with competition
-    m_n_hat <- hassel(n = m_n,
-                      r = m_r_xt,
-                      r0 = m_r0,
-                      k = m_k,
-                      interaction = m_interaction,
-                      z = z)
+    if (!is.list(m_interaction)) {
+      ### constant competition matrix across patches
+      m_n_hat <- hassel(n = m_n,
+                        r = m_r_xt,
+                        r0 = m_r0,
+                        k = m_k,
+                        interaction = m_interaction,
+                        z = z)
+    } else {
+      ### varied competition matrix across patches
+      m_n_hat <- sapply(1:n_patch, function(x) {
+        m_n_x <- hassel(n = m_n[, x],
+                        r = m_r_xt[, x],
+                        r0 = m_r0[, x],
+                        k = m_k[, x],
+                        interaction = m_interaction[[x]],
+                        z = z)
+      })
+
+    }
 
     ## dispersal, internal function: see "fun_dispersal.R"
     m_n_bar <- fun_dispersal(x = m_n_hat,

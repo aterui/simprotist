@@ -19,20 +19,31 @@ fun_int_mat <- function(n_species,
 
   if (interaction_type == "constant") {
 
-    if (any(alpha < 0)) stop("invalid value of alpha")
+    if (is.list(alpha)) {
 
-    if (length(alpha) == 1) {
-
-      m_interaction <- matrix(alpha,
-                              nrow = n_species,
-                              ncol = n_species)
-
-    }
-
-    if (is.matrix(alpha)) {
-
-      if (any(dim(alpha) != n_species)) stop("invalid dimension of alpha")
+      v_dim <- unlist(lapply(alpha, function(x) unique(dim(x))))
+      if (any(v_dim != n_species)) stop("invalid dimension of alpha")
+      if (any(unlist(alpha) < 0)) stop("invalid value of alpha")
       m_interaction <- alpha
+
+    } else {
+
+      if (any(alpha < 0)) stop("invalid value of alpha")
+
+      if (length(alpha) == 1) {
+
+        m_interaction <- matrix(alpha,
+                                nrow = n_species,
+                                ncol = n_species)
+
+      }
+
+      if (is.matrix(alpha)) {
+
+        if (any(dim(alpha) != n_species)) stop("invalid dimension of alpha")
+        m_interaction <- alpha
+
+      }
 
     }
 
@@ -51,9 +62,9 @@ fun_int_mat <- function(n_species,
                             nrow = n_species,
                             ncol = n_species)
 
-  }
+    diag(m_interaction) <- 1
 
-  diag(m_interaction) <- 1
+  }
 
   return(m_interaction)
 
