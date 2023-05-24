@@ -239,20 +239,32 @@ mcsimp <- function(n_species = 5,
                    by = max(c(1, propagule_interval)))
 
   ## dispersal
-  if (dispersal_interval > n_sim) {
+  if (length(dispersal_interval) == 1) {
 
-    psi <- rep(0, n_sim)
+    if (dispersal_interval > n_sim) {
 
+      psi <- rep(0, n_sim)
+
+    } else {
+
+      dispersal <- seq(from = dispersal_interval,
+                       to = n_sim,
+                       by = dispersal_interval)
+
+      psi <- rep(0, n_sim)
+      psi[dispersal] <- 1
+    } # length = 1
   } else {
 
-    dispersal <- seq(from = dispersal_interval,
-                     to = n_sim,
-                     by = dispersal_interval)
+    message("dispersal_interval is a vector: dispersal occurs at the specified timesteps")
+    if (any(dispersal_interval > n_sim)) stop("dispersal event must happen within simulation time steps")
+    if (any(dispersal_interval == 0)) stop("dispersal_interval = 0 detected")
 
+    dispersal <- dispersal_interval
     psi <- rep(0, n_sim)
     psi[dispersal] <- 1
 
-  }
+  } # length > 1
 
   ## initial values
   m_n <- matrix(rpois(n = n_species * n_patch,
