@@ -267,8 +267,7 @@ mcsimp <- function(n_species = 5,
   } # length > 1
 
   ## initial values
-  m_n <- matrix(rpois(n = n_species * n_patch,
-                      lambda = propagule_seed),
+  m_n <- matrix(propagule_seed,
                 nrow = n_species,
                 ncol = n_patch)
 
